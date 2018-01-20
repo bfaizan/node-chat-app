@@ -8,6 +8,14 @@ socket.on('connect',function() {
     text:"Hey, Whats up.",
     createAt:new Date()
   });
+  socket.on('welcome',function(message) {
+    console.log(message);
+  });
+
+  socket.on('newJoinee',function(message) {
+    console.log(message);
+  });
+
   socket.on('newMessage',function(message) {
     console.log(message);
   });
