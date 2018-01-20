@@ -3,9 +3,13 @@ socket.on('connect',function() {
   console.log("Connected To server.");
 
   socket.emit('createMessage',{
+    to:"Prashanth",
     from:"Faizan",
     text:"Hey, Whats up.",
     createAt:new Date()
+  });
+  socket.on('newMessage',function(message) {
+    console.log(message);
   });
 });
 socket.on('disconnect',function() {
