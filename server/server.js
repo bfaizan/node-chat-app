@@ -16,15 +16,15 @@ var io = socketIO(server);
 io.on('connection',(socket)=> {
     console.log("new user connected.");
 
-    socket.emit('newEmail',{
-      from:'faizanbijapure@gmail.com',
-      text:'Hey, what\'s going on.',
-      createAt:new Date()
-    });
+    // socket.emit('newEmail',{
+    //   from:'faizanbijapure@gmail.com',
+    //   text:'Hey, what\'s going on.',
+    //   createAt:new Date()
+    // });
 
     socket.on('createMessage',(message) => {
         console.log("createMessage", message);
-        io.emit('newMessage',{
+        socket.broadcast.emit('newMessage',{
           from:message.from,
           to:message.to,
           text:message.text,
