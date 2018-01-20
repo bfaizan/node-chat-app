@@ -34,6 +34,17 @@ socket.on('newMessage',function(message){
  jQuery("#messages").append(li);
 });
 
+socket.on('newLocationMessage',function(message){
+ console.log('New Message',message);
+ var li =jQuery('<li></li>');
+ var link = jQuery('<a target="_blank"> My current location</a>');
+
+ li.text(`${message.from}`);
+ link.attr('href', message.url);
+ li.append(link);
+ jQuery("#messages").append(li);
+});
+
 jQuery("#message-form").on('submit',function(e){
  e.preventDefault();
 

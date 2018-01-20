@@ -3,7 +3,7 @@
   const http = require('http');
   const socketIO = require('socket.io');
 
-  var {generateMessage} =require('./utils/message');
+  var {generateMessage,generateLocationMessage} =require('./utils/message');
   const publicPath = path.join(__dirname,'../public');
   const port = process.env.PORT ||  3000;
 
@@ -33,8 +33,12 @@
    //   console.log('createdMessage',message);
    //   io.emit('newMessage',generateMessage(message.from,message.text));
    //   });
+    // socket.on('createLocationMessage',(coords) => {
+    //     io.emit('newMessage',generateMessage('Admin',`${coords.latitude} , ${coords.longitude}`));
+    // });
+
     socket.on('createLocationMessage',(coords) => {
-        io.emit('newMessage',generateMessage('Admin',`${coords.latitude} , ${coords.longitude}`));
+        io.emit('newLocationMessage',generateLocationMessage('user',coords.latitude ,coords.longitude));
     });
 
    socket.emit('newMessage',generateMessage('Admin','Welcome to chat app'));
