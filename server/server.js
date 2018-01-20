@@ -1,62 +1,50 @@
 const path = require('path');
-const http = require('http');
 const express = require('express');
+const http = require('http');
 const socketIO = require('socket.io');
-const port = process.env.PORT || 3000;
-const publicPath = path.join(__dirname,"../public");
 
-var app = express();
-// var server = http.createServer((req,res) => {
-//
-// });
+var {generateMessage} =require('./utils/message');
+const publicPath = path.join(__dirname,'../public');
+const port = process.env.PORT ||  3000;
 
+
+var app=express();
 var server = http.createServer(app);
+var io = socketIO(server);//http://localhost:3000/socket.io/socket.io.js
+io.on('connection',(socket)=>{
+ console.log('New user connected');
 
-var io = socketIO(server);
-io.on('connection',(socket)=> {
-    console.log("new user connected.");
+ socket.on('disconnect',()=>{
+   console.log('Disconnected one of client.');
+ });
+ //Emit Events
+ // socket.emit('newEmail',{
+ //   from:"shri@gmail.com",
+ //   text:"Hey,what is going on",
+ //   createdAt:123
+ // });
 
-    // socket.emit('newEmail',{
-    //   from:'faizanbijapure@gmail.com',
-    //   text:'Hey, what\'s going on.',
-    //   createAt:new Date()
-    // });
-    io.emit('welcome',{
-      from:"admin",
-      text:"Welcome to chat app",
-      createAt:new Date()
-    });
+ //Listening Events
+ socket.on('newMessage',(newMessage)=>{
+   console.log('Create Message',newMessage);
+ });
 
-    socket.broadcast.emit('newJoinee',{
-      from:"admin",
-      text:"New User Joined",
-      createAt:new Date()
-    });
+ socket.on('createMessage',(message)=>{
+   console.log('createdMessage',message);
+   io.emit('newMessage',generateMessage(message.from,message.text));
+   });
 
-    socket.on('createMessage',(message) => {
-        console.log("createMessage", message);
-        socket.broadcast.emit('newMessage',{
-          from:message.from,
-          to:message.to,
-          text:message.text,
-          createAt:message.createAt
-        });
-    });
 
-    socket.on('disconnect',()=>{
-      console.log('User was disconnected');
-    });
+ socket.emit('newMessage',generateMessage('Admin','Welcome to chat app'));
+ socket.broadcast.emit('newMessage',generateMessage('Admin','New user Joined'));
+
+
 });
 
 
 
 app.use(express.static(publicPath));
-
-
-app.get('/',(req,res) => {
-  res.send("Node chat app started");
-});
-
-server.listen(port, ()=>{
-  console.log(`server is up on port ${port}`);
+//Start the server.
+server.listen(port,()=>{
+ console.log(`listening on ${port}`);
 });
