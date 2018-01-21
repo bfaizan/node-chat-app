@@ -29,10 +29,10 @@
    //   console.log('Create Message',newMessage);
    // });
    //
-   // socket.on('createMessage',(message)=>{
-   //   console.log('createdMessage',message);
-   //   io.emit('newMessage',generateMessage(message.from,message.text));
-   //   });
+   socket.on('createMessage',(message)=>{
+     console.log('createdMessage',message);
+     io.emit('newMessage',generateMessage(message.from,message.text));
+     });
     // socket.on('createLocationMessage',(coords) => {
     //     io.emit('newMessage',generateMessage('Admin',`${coords.latitude} , ${coords.longitude}`));
     // });
