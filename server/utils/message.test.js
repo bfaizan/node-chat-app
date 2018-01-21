@@ -6,8 +6,9 @@ describe('generateMessage',()=>{
     it('should generate correct message object ' , () => {
         var from = "Jen";
         var text = "Hi Jen";
+        var createdAt = new Date().getTime();
         var message = generateMessage(from ,text);
         expect(typeof message.createdAt).toBe('number');
-        expect(message).toBe({from,text});
+        expect(message).toEqual({from,text,createdAt});
     });
 });
